@@ -56,4 +56,4 @@ if __name__ == "__main__":
     except:
         e = sys.exc_info()[0]
         print >>sys.stderr, e
-        sys.exiy(-1)
+        sys.exit(-1)

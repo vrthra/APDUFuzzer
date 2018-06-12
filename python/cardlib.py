@@ -24,10 +24,28 @@ errorchain = [ ErrorCheckingChain(errorchain, ISO7816_9ErrorChecker()),
             ErrorCheckingChain(errorchain, ISO7816_8ErrorChecker()),
             ErrorCheckingChain(errorchain, ISO7816_4ErrorChecker()) ]
 
+INS_BAD = [APDU.APDU_CMD.VERIFY, APDU.APDU_CMD.CHANGE_REF_DATA]
+
+INS_GOOD = [i for i in range(0xFF + 1) if i not in INS_BAD]
+
 def is_unsupporrted_class(sw1, sw2):
     # unsupported class is 0x6E00
     return (sw1 == 0x6E) and (sw2 == 0x00)
 
+# What values do we consider a success?
+INS_SUCCESS_LIST = [0x90, # Success
+                0x61, # More Data
+                0x67, # Wrong Length
+                0x6c, # Wrong Length
+                0x6a, # Referenced Data not found
+#                        0x69 # Access Violation (Not sure about this)
+                ]
+
+INS_SUCCESS_FAIL = [(0x6a, 0x81) # Funciton not supported
+                        ]
+def is_supported_ins():
+    SUCCESS_BAD_PARAM = [(0x6a, 0x86) #Incorrect Paramters
+                         ]
 """
     Functions for interacting with the card
 """
